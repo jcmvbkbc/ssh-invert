@@ -1,0 +1,22 @@
+Simple filter to mangle ssh data stream to fool moronic DPI tools used to
+prevent ssh connections. Use it in the script specified in .ssh/config
+ProxyCommand, like this:
+
+  ssh-invert | nc <ssh-server> <ssh-invert-port> | ssh-invert
+
+On the other side at the ssh-server use the same wrapper as a script for
+e.g. xinetd:
+
+    service daap
+    {
+            disable         = no
+            server          = /usr/bin/ssh-invert.sh
+            socket_type     = stream
+            protocol        = tcp
+            user            = ssh-invert
+            wait            = no
+    }
+
+and /usr/bin/ssh-invert.sh looking like
+
+  ssh-invert | nc 127.0.0.1 22 | ssh-invert
