@@ -1,0 +1,3 @@
+#! /bin/sh
+
+@bindir@/ssh-invert | nc "$@" | @bindir@/ssh-invert
