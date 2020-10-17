@@ -25,6 +25,7 @@ AC_INIT([ssh-invert], [1.0])
 AC_CONFIG_AUX_DIR(autoconf)
 AC_CONFIG_MACRO_DIR(autoconf)
 AM_INIT_AUTOMAKE([foreign subdir-objects silent-rules])
+AM_MAINTAINER_MODE
 AC_CONFIG_SRCDIR([configure.ac])
 AC_PROG_CC
 AC_CONFIG_FILES([Makefile])
