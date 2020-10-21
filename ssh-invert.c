@@ -5,7 +5,7 @@
 
 int main()
 {
-        char c[4096];
+        char c[1024 * 1024];
         fd_set readfds;
 
         FD_ZERO(&readfds);
