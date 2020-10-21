@@ -1,3 +1,4 @@
+#include <errno.h>
 #include <sys/select.h>
 #include <sys/time.h>
 #include <sys/types.h>
@@ -12,8 +13,13 @@ int main()
 	for (;;) {
 		ssize_t rd = read(STDIN_FILENO, c, sizeof(c));
 		if (rd < 0) {
-			FD_SET(STDIN_FILENO, &readfds);
-			select(STDIN_FILENO + 1, &readfds, NULL, NULL, NULL);
+			if (errno == EAGAIN ||
+			    errno == EWOULDBLOCK) {
+				FD_SET(STDIN_FILENO, &readfds);
+				select(STDIN_FILENO + 1, &readfds, NULL, NULL, NULL);
+			} else {
+				return -1;
+			}
 		} else if (rd == 0) {
 			return 0;
 		} else {
@@ -26,6 +32,8 @@ int main()
 					return 0;
 				else if (wr > 0)
 					i += wr;
+				else
+					return 1;
 			}
 		}
 	}
