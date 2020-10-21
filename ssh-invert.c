@@ -1,4 +1,5 @@
 #include <errno.h>
+#include <fcntl.h>
 #include <sys/select.h>
 #include <sys/time.h>
 #include <sys/types.h>
@@ -8,7 +9,9 @@ int main()
 {
 	char c[1024 * 1024];
 	fd_set readfds;
+	int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
 
+	fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
 	FD_ZERO(&readfds);
 	for (;;) {
 		ssize_t rd = read(STDIN_FILENO, c, sizeof(c));
